@@ -6,7 +6,7 @@
   const BASE_URL = window.SWIPETCHA_BASE_URL ||
     ((typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
       ? `http://${window.location.hostname || '127.0.0.1'}:8000`
-      : 'https://captcha-2-0-5.onrender.com');
+      : 'https://captcha-v3-0.onrender.com');
 
   const VERIFY_ENDPOINT = `${BASE_URL}/verify`;
   const CHALLENGE_ENDPOINT = `${BASE_URL}/challenge`;
