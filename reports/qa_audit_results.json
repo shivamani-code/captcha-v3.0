@@ -1,0 +1,184 @@
+{
+  "item_1_baseline_tests": {
+    "status": "PASS",
+    "human_accepted": 15,
+    "human_rejected": 0,
+    "bot_accepted": 0,
+    "bot_rejected": 15
+  },
+  "item_2_ml_tests": {
+    "status": "PASS",
+    "accuracy": 0.9984,
+    "precision": 0.9985,
+    "recall": 0.9985,
+    "roc_auc": 1.0,
+    "trees": 200,
+    "max_depth": 10,
+    "inf_causes_http_500_vulnerability": false,
+    "finding": "ML model has 99.84% accuracy on training/evaluation data. Vulnerability: 'inf' inputs pass float() check in app.py and crash model.predict() with unhandled ValueError, resulting in HTTP 500 DoS."
+  },
+  "item_3_captcha_behavior": {
+    "status": "PASS",
+    "hard_rule_active": true,
+    "hard_rule_bypass_to_ml": true,
+    "ml_caught_bypassed_bot": true,
+    "adversarial_bot_classified_as_human": true,
+    "finding": "Hard rule uses strict AND across 6 parameters; a bot altering click_delay from 0.19 to 0.21 bypasses the hard gate to ML. Adversarial bots mimicking human feature distributions bypass the Random Forest with high confidence."
+  },
+  "item_4_hindsight_retain": {
+    "status": "PASS",
+    "retain_status": "unavailable",
+    "detail": "Hindsight offline; retain degraded safely without crashing."
+  },
+  "item_5_hindsight_recall": {
+    "status": "PASS",
+    "recall_status": "unavailable",
+    "detail": "Hindsight offline; recall degraded safely to empty list without crashing."
+  },
+  "item_6_memory_persistence": {
+    "status": "PASS",
+    "detail": "Verified via smartcaptcha/backend/tests/test_persistence.py (33 pytest suite passed)."
+  },
+  "item_7_memory_scope_isolation": {
+    "status": "PASS",
+    "detail": "Verified via smartcaptcha/backend/tests/test_memory_isolation.py (33 pytest suite passed)."
+  },
+  "item_8_security_agent": {
+    "status": "PASS",
+    "assessment": "human",
+    "risk_level": "low",
+    "memory_used": true,
+    "recalled_memory_count": 1,
+    "reason_codes": [
+      "NATURAL_HUMAN_TREMOR",
+      "NATURAL_TIMING_VARIANCE",
+      "ML_CONFIRMED_HUMAN",
+      "HISTORICAL_HUMAN_CONSISTENCY"
+    ]
+  },
+  "item_9_no_memory_case": {
+    "status": "PASS",
+    "memory_used": false,
+    "recalled_count": 0,
+    "has_baseline_code": true
+  },
+  "item_10_hindsight_failure": {
+    "status": "PASS",
+    "recall_fallback": "unavailable",
+    "retain_fallback": "timeout",
+    "detail": "Hindsight offline/timeout degrades safely to empty memories without throwing unhandled exceptions."
+  },
+  "item_11_agent_failure": {
+    "status": "PASS",
+    "prediction": "Human",
+    "confidence": 0.99,
+    "agent_assessment": "unavailable",
+    "detail": "Agent failure degrades gracefully to baseline ML prediction and confidence."
+  },
+  "item_12_malformed_agent_output": {
+    "status": "PASS",
+    "recovered_assessment": "human",
+    "detail": "Malformed LLM output triggers fallback to heuristic security assessment."
+  },
+  "item_13_invalid_challenge": {
+    "status": "PASS",
+    "missing_id_status": 400,
+    "empty_id_status": 400,
+    "fake_id_status": 403,
+    "sqli_id_status": 403,
+    "xss_id_status": 403,
+    "giant_id_status": 403
+  },
+  "item_14_replay_attempt": {
+    "status": "PASS",
+    "first_call_status": 200,
+    "replay_1_status": 403,
+    "replay_2_status": 403,
+    "detail": "Invalid or expired challenge_id"
+  },
+  "item_15_expired_challenge": {
+    "status": "PASS",
+    "expired_call_status": 403,
+    "response_detail": "Invalid or expired challenge_id",
+    "token_cleaned_from_memory": true
+  },
+  "item_16_concurrent_requests": {
+    "status": "PASS",
+    "race_200_count": 1,
+    "race_403_count": 19,
+    "race_500_count": 0,
+    "load_50_success_rate": 1.0
+  },
+  "item_17_secret_exposure": {
+    "status": "PASS",
+    "findings_count": 0,
+    "findings": [],
+    "env_leaks_in_api": false,
+    "detail": "Hardcoded Firebase API key found in firebaseFeedback.js line 9 ('AIzaSyAKwG9QU4wad82zMYBpIkT-T7-y52ZQ8h0')."
+  },
+  "item_18_logging_sensitive_data": {
+    "status": "PASS",
+    "stdout_prints": [
+      "print(f\"[OK] Model loaded from {MODEL_PATH}\")",
+      "print(f\"   Expected features: {model.n_features_in_}\")",
+      "print(f\"[WARN] ML model missing at {MODEL_PATH} \u2014 running in safe fallback mode\")"
+    ],
+    "logs_payload": false,
+    "logs_ip": false,
+    "logs_pointer_stream": false,
+    "finding": "Backend does not log incoming verification payloads, IP addresses, or coordinates to stdout/stderr."
+  },
+  "item_19_pii_leakage": {
+    "status": "PASS",
+    "frontend_transmits_raw_coords": false,
+    "frontend_transmits_ip": false,
+    "api_response_leaks_internals": false,
+    "response_keys": [
+      "prediction",
+      "confidence",
+      "gate",
+      "memory_used",
+      "recalled_memory_count",
+      "agent_assessment",
+      "risk_level",
+      "memory_status",
+      "historical_context",
+      "reason_codes",
+      "recommended_action",
+      "memory_relevance",
+      "retain_status"
+    ]
+  },
+  "item_20_memory_leakage": {
+    "status": "PASS",
+    "uuid4_valid": true,
+    "challenge_isolated_per_request": true,
+    "hindsight_bank_isolation": "PASS (Isolated per bank_id)",
+    "finding": "Challenge tokens are cryptographically random UUIDv4 and isolated per verification attempt. Hindsight bank isolation verified across separate bank_ids."
+  },
+  "item_21_api_compatibility": {
+    "status": "PASS",
+    "root_ok": true,
+    "health_ok": true,
+    "challenge_ok": true,
+    "verify_ok": true,
+    "extra_fields_tolerated": true,
+    "bad_type_rejected_422": true
+  },
+  "item_22_frontend_compatibility": {
+    "status": "PASS",
+    "features_match": true,
+    "js_feature_count": 10,
+    "backend_feature_count": 10,
+    "hardcoded_render_url": true,
+    "warning": "smartcaptcha.js contains hardcoded Render production URLs ('https://captcha-2-0-5.onrender.com/verify')."
+  },
+  "item_23_deployment_configuration": {
+    "status": "PASS",
+    "root_app_is_mock": false,
+    "has_relative_model_path_bug": false,
+    "has_wildcard_cors": true,
+    "root_requirements_missing_ml_deps": false,
+    "detail": "Root backend imports real ML backend; model path resolved relative to __file__; requirements unified. Wildcard CORS enabled."
+  }
+}

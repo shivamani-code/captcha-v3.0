@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+joblib
+scikit-learn
+pandas
+numpy
+pydantic
+hindsight-client>=0.10.1

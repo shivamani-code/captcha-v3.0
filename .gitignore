@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*.pkl
+!smartcaptcha/backend/captcha_model.pkl
+.venv/
+.pytest_cache/
+*.log
+.hindsight_storage.json

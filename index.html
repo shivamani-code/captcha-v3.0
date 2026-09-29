@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SmartCAPTCHA Demo — Hindsight Security Observability</title>
+  <link rel="stylesheet" href="/style.css?v=2" />
+</head>
+<body>
+  <main class="page">
+    <h1 class="title">SwipeTCHA</h1>
+    <p class="subtitle">Complete the slider. The widget will send behavioral features to the verifier service with Hindsight persistent experience memory and Security Agent contextual reasoning.</p>
+    <section id="smartcaptcha-root" class="captcha-root"></section>
+    <section class="result">
+      <div id="smartcaptcha-status" class="status" aria-live="polite"></div>
+      <div class="actions">
+        <button id="smartcaptcha-reset" class="btn" type="button">Reset</button>
+      </div>
+    </section>
+
+    <!-- Developer & Demo Observability View -->
+    <details class="sc-observability-panel" id="sc-observability-panel" open>
+      <summary class="sc-observability-summary">Security Observability & Hindsight Memory (Developer View)</summary>
+      <div class="sc-observability-content">
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Hindsight Status:</span>
+          <span id="obs-hindsight-status" class="sc-obs-badge sc-obs-badge--available">Checking...</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">ML Prediction:</span>
+          <span id="obs-ml-prediction" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">ML Confidence:</span>
+          <span id="obs-ml-confidence" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Decision Gate:</span>
+          <span id="obs-hard-rule-gate" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Security Agent:</span>
+          <span id="obs-agent-assessment" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Risk Level:</span>
+          <span id="obs-risk-level" class="sc-obs-badge">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Memory Used:</span>
+          <span id="obs-memory-used" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Recalled Experiences:</span>
+          <span id="obs-recalled-count" class="sc-obs-val">0</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Retain Status:</span>
+          <span id="obs-retain-status" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-row">
+          <span class="sc-obs-label">Recommended Action:</span>
+          <span id="obs-recommended-action" class="sc-obs-val">-</span>
+        </div>
+        <div class="sc-obs-context" id="obs-historical-context">
+          <em>Ready. Perform a swipe above to see real-time behavioral telemetry, Hindsight memory recall, and contextual Security Agent evaluation.</em>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <footer class="sc-footer">
+    <a id="smartcaptcha-feedback" class="sc-footer-link" href="#">Feedback</a>
+  </footer>
+
+  <div id="sc-feedback-modal" class="sc-modal" hidden>
+    <div class="sc-modal__backdrop" data-sc-close="true"></div>
+    <div class="sc-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="sc-feedback-title">
+      <button type="button" class="sc-modal__close" data-sc-close="true" aria-label="Close">×</button>
+      <h2 id="sc-feedback-title" class="sc-modal__title">Feedback</h2>
+      <form id="sc-feedback-form" class="sc-modal__form">
+        <label class="sc-modal__label">
+          <span>Email *</span>
+          <input id="sc-feedback-email" class="sc-modal__input" type="email" required autocomplete="email" />
+        </label>
+        <label class="sc-modal__label">
+          <span>Message</span>
+          <textarea id="sc-feedback-message" class="sc-modal__textarea" rows="4"></textarea>
+        </label>
+        <div id="sc-feedback-status" class="sc-modal__status" aria-live="polite"></div>
+        <div class="sc-modal__actions">
+          <button id="sc-feedback-submit" class="btn" type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/smartcaptcha.js?v=3"></script>
+  <script src="/firebaseFeedback.js?v=2"></script>
+  <script src="/feedbackModal.js?v=2"></script>
+</body>
+</html>
