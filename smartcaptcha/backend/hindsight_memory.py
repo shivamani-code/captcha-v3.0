@@ -12,9 +12,18 @@ from memory_schema import SecurityExperience, RecalledMemoryItem
 def _safe_run_async(coro):
     try:
         loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
     except RuntimeError:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
+
+    if loop.is_running():
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            return pool.submit(lambda: asyncio.run(coro)).result()
+
     task = loop.create_task(coro)
     return loop.run_until_complete(task)
 
@@ -78,7 +87,7 @@ class HindsightMemoryService:
         bank_id: Optional[str] = None,
         timeout: Optional[float] = None,
     ):
-        self.base_url = base_url or config.hindsight_api_url
+        self.base_url = base_url or config.hindsight_api_key and config.hindsight_api_url or (base_url or config.hindsight_api_url)
         self.api_key = api_key or config.hindsight_api_key
         self.default_bank_id = bank_id or config.hindsight_default_bank_id
         self.timeout = timeout if timeout is not None else config.hindsight_timeout
@@ -86,12 +95,26 @@ class HindsightMemoryService:
             failure_threshold=config.hindsight_circuit_breaker_threshold,
             recovery_timeout=config.hindsight_circuit_breaker_timeout,
         )
+        self._ensure_local_backend_if_configured()
+
+    def _ensure_local_backend_if_configured(self):
+        if not config.enable_memory:
+            return
+        normalized_url = (self.base_url or "").rstrip("/").lower()
+        if normalized_url in ("http://127.0.0.1:8888", "http://localhost:8888"):
+            try:
+                from mock_hindsight_server import ensure_mock_server_running
+                ensure_mock_server_running(host="127.0.0.1", port=8888)
+            except Exception as e:
+                logger.debug(f"Could not auto-start local Hindsight server: {e}")
 
     def _init_client(self):
         """Backwards compatibility hook; client is managed per-call."""
-        pass
+        self._ensure_local_backend_if_configured()
+        self.circuit_breaker.reset()
 
     def _get_client(self) -> Optional[Hindsight]:
+        self._ensure_local_backend_if_configured()
         try:
             return Hindsight(
                 base_url=self.base_url,

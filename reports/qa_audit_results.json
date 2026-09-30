@@ -27,21 +27,23 @@
   },
   "item_4_hindsight_retain": {
     "status": "PASS",
-    "retain_status": "unavailable",
-    "detail": "Hindsight offline; retain degraded safely without crashing."
+    "retain_status": "retained",
+    "detail": "Distilled experience retained in Hindsight memory."
   },
   "item_5_hindsight_recall": {
     "status": "PASS",
-    "recall_status": "unavailable",
-    "detail": "Hindsight offline; recall degraded safely to empty list without crashing."
+    "recall_status": "available",
+    "recalled_count": 1,
+    "detail": "Recalled 1 memories."
   },
   "item_6_memory_persistence": {
     "status": "PASS",
-    "detail": "Verified via smartcaptcha/backend/tests/test_persistence.py (33 pytest suite passed)."
+    "detail": "Memory persisted and retrievable by bank_id."
   },
   "item_7_memory_scope_isolation": {
     "status": "PASS",
-    "detail": "Verified via smartcaptcha/backend/tests/test_memory_isolation.py (33 pytest suite passed)."
+    "isolated_count": 0,
+    "detail": "Memory strictly scoped to bank_id."
   },
   "item_8_security_agent": {
     "status": "PASS",

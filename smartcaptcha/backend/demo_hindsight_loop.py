@@ -25,26 +25,8 @@ def print_step(letter: str, title: str):
     print(f"\n[{letter}] {title}")
     print("-" * 50)
 
-def ensure_mock_server_running(host: str = "127.0.0.1", port: int = 8888):
-    """
-    Detects if a Hindsight service is listening on the target port.
-    If not, automatically launches the local mock Hindsight server in a daemon thread.
-    """
-    import socket
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(0.3)
-        if s.connect_ex((host, port)) == 0:
-            return None
+from mock_hindsight_server import ensure_mock_server_running
 
-    import threading
-    import uvicorn
-    from mock_hindsight_server import mock_hindsight_app
-    server_config = uvicorn.Config(mock_hindsight_app, host=host, port=port, log_level="error")
-    server = uvicorn.Server(server_config)
-    t = threading.Thread(target=server.run, daemon=True)
-    t.start()
-    time.sleep(0.8)
-    return t
 
 def run_demo():
     print_separator("SWIPECHA + HINDSIGHT FULL INTEGRATION DEMO (STEPS A -> K)")

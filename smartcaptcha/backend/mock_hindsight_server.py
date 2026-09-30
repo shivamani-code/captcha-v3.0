@@ -137,3 +137,37 @@ def delete_bank(bank_id: str):
         del storage[bank_id]
         save_storage(storage)
     return {"success": True, "bank_id": bank_id}
+
+def ensure_mock_server_running(host: str = "127.0.0.1", port: int = 8888):
+    """
+    Detects if a Hindsight service is listening on the target port.
+    If not, automatically launches the local mock Hindsight server in a daemon thread.
+    """
+    import socket
+    import time
+    import threading
+    import uvicorn
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(0.3)
+        if s.connect_ex((host, port)) == 0:
+            return None
+
+    server_config = uvicorn.Config(mock_hindsight_app, host=host, port=port, log_level="error")
+    server = uvicorn.Server(server_config)
+    t = threading.Thread(target=server.run, daemon=True)
+    t.start()
+
+    # Wait briefly for socket readiness
+    for _ in range(20):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.1)
+            if s.connect_ex((host, port)) == 0:
+                break
+        time.sleep(0.05)
+    return t
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(mock_hindsight_app, host="127.0.0.1", port=8888, log_level="info")
+

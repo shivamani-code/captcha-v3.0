@@ -4,8 +4,8 @@
   const resetBtn = document.getElementById('smartcaptcha-reset');
 
   const BASE_URL = window.SWIPETCHA_BASE_URL ||
-    ((typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
-      ? `http://${window.location.hostname || '127.0.0.1'}:8000`
+    ((typeof window !== 'undefined' && (!window.location.hostname || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+      ? `http://127.0.0.1:8000`
       : 'https://captcha-v3-0.onrender.com');
 
   const VERIFY_ENDPOINT = `${BASE_URL}/verify`;
@@ -30,8 +30,9 @@
 
     const statusBadge = document.getElementById('obs-hindsight-status');
     if (statusBadge && result.memory_status) {
-      statusBadge.textContent = result.memory_status;
-      statusBadge.className = `sc-obs-badge sc-obs-badge--${result.memory_status}`;
+      const isHealthy = result.memory_status === 'available' || result.memory_status === 'connected';
+      statusBadge.textContent = isHealthy ? 'connected' : result.memory_status;
+      statusBadge.className = `sc-obs-badge sc-obs-badge--${isHealthy ? 'connected' : (result.memory_status === 'skipped' ? 'available' : 'error')}`;
     }
 
     const riskBadge = document.getElementById('obs-risk-level');
@@ -54,13 +55,16 @@
       .then(data => {
         const badge = document.getElementById('obs-hindsight-status');
         if (badge && data.hindsight_status) {
-          badge.textContent = data.hindsight_status;
-          badge.className = `sc-obs-badge sc-obs-badge--${data.hindsight_healthy ? 'connected' : 'available'}`;
+          badge.textContent = data.hindsight_healthy ? 'connected' : data.hindsight_status;
+          badge.className = `sc-obs-badge sc-obs-badge--${data.hindsight_healthy ? 'connected' : 'error'}`;
         }
       })
       .catch(() => {
         const badge = document.getElementById('obs-hindsight-status');
-        if (badge) badge.textContent = 'connecting...';
+        if (badge) {
+          badge.textContent = 'error';
+          badge.className = 'sc-obs-badge sc-obs-badge--error';
+        }
       });
   }
 

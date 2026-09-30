@@ -283,3 +283,10 @@ def verify(payload: dict, background_tasks: BackgroundTasks = None):
     result_dict = response_obj.model_dump()
     result_dict["retain_status"] = retain_status
     return result_dict
+
+
+if __name__ == "__main__":
+    import uvicorn
+    hindsight_service._init_client()
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+
